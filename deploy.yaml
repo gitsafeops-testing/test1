@@ -1,0 +1,19 @@
+name: Insecure Deployment
+on:
+  push:
+    branches: [ main, develop, feature/* ]  # ❌ Runs on any branch
+  pull_request:  # ❌ Runs on PRs from forks (dangerous)
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v2  # ❌ Old version
+
+    - name: Deploy to Production  # ❌ No environment protection
+      run: |
+        echo "Deploying to production..."
+        echo "API_KEY=sk_live_dangerous_key_here" >> .env  # ❌ Hardcoded in workflow
+        curl -X POST https://api.production.com/deploy \
+          -H "Authorization: Bearer hardcoded-token-123"  # ❌ Hardc
